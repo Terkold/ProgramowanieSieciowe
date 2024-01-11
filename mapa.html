@@ -1,0 +1,80 @@
+ <!DOCTYPE html>
+<html>
+   <head>
+      <title>Leaflet sample</title>
+      <link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+      <script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+   </head>
+   
+   <body>
+      <div id = "map" style = "width: 900px; height: 580px"></div>
+      <script>
+         // Creating map options
+         var mapOptions = {
+            center: [54.132324, 19.471236],
+            zoom: 15
+         }
+         
+         // Creating a map object
+         var map = new L.map('map', mapOptions);
+         
+         // Creating a Layer object
+         var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+         var ADJA_A = L.tileLayer.wms("http://localhost:8080/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities",{
+            layers: "pejs:PL.PZGiK.341.2804__OT_ADJA_A",
+            format: "image/png",
+            weight: 0.5,
+            transparent: true })
+			
+			var BUBD_A = L.tileLayer.wms("http://localhost:8080/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities",{
+            layers: "pejs:PL.PZGiK.341.2804__OT_BUBD_A",
+            format: "image/png",
+            weight: 1,
+            transparent: true })
+			
+			var PTWP_A = L.tileLayer.wms("http://localhost:8080/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities",{
+            layers: "pejs:PL.PZGiK.341.2804__OT_PTWP_A",
+            format: "image/png",
+            weight: 1,
+            transparent: true })
+			
+			var SKJZ_L = L.tileLayer.wms("http://localhost:8080/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities",{
+            layers: "pejs:PL.PZGiK.341.2804__OT_SKJZ_L",
+            format: "image/png",
+            weight: 1,
+            transparent: true })
+			
+			var SKRP_L = L.tileLayer.wms("http://localhost:8080/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities",{
+            layers: "pejs:PL.PZGiK.341.2804__OT_SKRP_L",
+            format: "image/png",
+            weight: 1,
+            transparent: true })
+         
+         // Adding layer to the map
+         map.addLayer(layer);
+
+        map.addLayer(ADJA_A);
+		map.addLayer(BUBD_A);
+		map.addLayer(PTWP_A);
+		map.addLayer(SKJZ_L);
+		map.addLayer(SKRP_L);
+
+      
+		
+		
+         var layers = {
+        "Budynki": BUBD_A,
+        "Granice administracyjne": ADJA_A,
+        "Wody powierzchniowe": PTWP_A,
+        "Jezdnie": SKJZ_L,
+        "Ciąg ruchu pieszego i rowerowego": SKRP_L,
+        "Mapa podkładowa" : layer
+    };
+    
+    var layerControl = L.control.layers(null,layers).addTo(map);
+    
+      </script>
+   </body>
+   
+</html>
