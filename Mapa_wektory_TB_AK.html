@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css">
+    <style>
+      #map {
+        width: 100%;
+        height: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+  </body>
+</html>
+
+<script>
+var map = L.map("map").setView([54.132324, 19.471236], 15);
+var osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+//Geoserver Web Feature Service
+$.ajax('http://localhost:8080/geoserver/wfs',{
+  type: 'GET',
+  data: {
+    service: 'WFS',
+    version: '1.1.0',
+    request: 'GetFeature',
+    typename: 'pejs:PL.PZGiK.341.2804__OT_BUBD_A',
+    srsname: 'EPSG:4326',
+    outputFormat: 'text/javascript',
+    },
+  dataType: 'jsonp',
+  jsonpCallback:'callback:handleJson',
+  jsonp:'format_options'
+ });
+  //Geojson style file
+  var myStyle = {
+    'color': 'red'
+  }
+// the ajax callback function
+function handleJson(data) {
+    selectedArea = L.geoJson(data, {
+      style: myStyle,
+      onEachFeature: function(feature, layer) {
+        layer.bindPopup(`Name: ${feature.properties.name_of_your_property}`)
+      }
+    }).addTo(map);
+  map.fitBounds(selectedArea.getBounds());
+}
+</script>
